@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملاذ - منصة القصائد والخواطر والصور</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                        },
+                        emerald: {
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        sand: {
+                            50: '#faf8f5',
+                            100: '#f4efe6',
+                            800: '#2b2621',
+                            900: '#1c1815'
+                        }
+                    },
+                    fontFamily: {
+                        amiri: ['Amiri', 'serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                        aref: ['Aref Ruqaa', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Arabic Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .font-poem {
+            font-family: 'Amiri', serif;
+        }
+        .font-calligraphy {
+            font-family: 'Aref Ruqaa', serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(217, 119, 6, 0.3);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(217, 119, 6, 0.6);
+        }
+        .poem-verse {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            text-align: center;
+            border-bottom: 1px dashed rgba(217, 119, 6, 0.15);
+            padding: 0.5rem 0;
+        }
+        @media (max-width: 640px) {
+            .poem-verse {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-sand-50 text-slate-800 dark:bg-sand-900 dark:text-sand-100 min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-amber-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-sand-50/90 dark:bg-sand-900/90 border-b border-amber-500/20 shadow-sm transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('feed')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-white shadow-md shadow-amber-500/20 transform rotate-3 hover:rotate-0 transition-transform">
+                        <i class="fa-solid font-calligraphy text-2xl">م</i>
+                    </div>
+                    <div>
+                        <h1 class="font-calligraphy text-2xl font-bold bg-gradient-to-r from-amber-700 via-amber-600 to-amber-500 dark:from-amber-400 dark:to-amber-200 bg-clip-text text-transparent">
+                            ملاذ
+                        </h1>
+                        <p class="text-[10px] text-amber-700/70 dark:text-amber-400/70 -mt-1 font-tajawal">مأوى القوافي والخواطر</p>
+                    </div>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="ابحث عن قصيدة، كاتب، أو هاشتاق..." class="w-full bg-white/80 dark:bg-sand-800/80 text-sm rounded-full pr-10 pl-4 py-2 border border-amber-500/20 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-400 dark:placeholder:text-sand-100/40">
+                        <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-2.5 text-amber-600/60 dark:text-amber-400/60 text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- Nav Links & Controls -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button onclick="switchTab('feed')" id="nav-feed" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all text-amber-700 bg-amber-500/10 dark:text-amber-400 dark:bg-amber-400/10">
+                        <i class="fa-solid fa-compass"></i>
+                        <span class="hidden sm:inline">الرئيسية</span>
+                    </button>
+
+                    <button onclick="switchTab('profile')" id="nav-profile" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-sand-100/80 hover:bg-amber-500/10 hover:text-amber-600 transition-all">
+                        <i class="fa-solid fa-user-nib"></i>
+                        <span class="hidden sm:inline">ملفي الشخصي</span>
+                    </button>
+
+                    <!-- New Post Button -->
+                    <button onclick="openPostModal()" class="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 text-white px-4 py-1.5 rounded-full text-sm font-medium shadow-md shadow-amber-500/20 transform hover:-translate-y-0.5 transition-all">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>انشر الآن</span>
+                    </button>
+
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-sand-100 dark:bg-sand-800 text-amber-600 dark:text-amber-400 flex items-center justify-center hover:ring-2 ring-amber-500/30 transition-all" title="تبديل المظهر">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Search Bar -->
+            <div class="pb-3 pt-1 md:hidden">
+                <div class="relative w-full">
+                    <input type="text" id="searchInputMobile" oninput="handleSearchMobile()" placeholder="ابحث عن قصيدة، كاتب، أو موضوع..." class="w-full bg-white/80 dark:bg-sand-800/80 text-sm rounded-full pr-10 pl-4 py-1.5 border border-amber-500/20 focus:outline-none focus:border-amber-500 text-slate-800 dark:text-sand-100">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-2.5 text-amber-600/60 dark:text-amber-400/60 text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+        
+        <!-- SECTION: Feed View -->
+        <div id="feedSection" class="space-y-6">
+            <!-- Hero / Welcome Banner -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-900 via-emerald-900 to-sand-900 text-white p-6 sm:p-8 shadow-lg border border-amber-500/20">
+                <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs rounded-full inline-block mb-3 font-calligraphy">مُنْتَدَى الأدب والجمال</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold font-calligraphy mb-2 text-amber-100">"ومَا مِن كَاتِبٍ إلا سَيَفْنَى .. ويُبقِي الدَّهْرُ مَا كَتَبَتْ يَدَاهُ"</h2>
+                    <p class="text-sm text-sand-100/80 leading-relaxed mb-4">انشر أبياتك الشعرية، خواطرك اللطيفة، أو التقط لحظاتك وشارك القصة خلفها مع مجتمع عشاق الكلمة والصورة.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterPosts('all')" class="filter-btn active-filter px-3 py-1 rounded-full text-xs font-medium bg-amber-500 text-white shadow-sm transition-all" data-category="all">الكل</button>
+                        <button onclick="filterPosts('poem')" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-white/10 hover:bg-white/20 text-sand-100 transition-all" data-category="poem">قصائد ونصوص</button>
+                        <button onclick="filterPosts('prose')" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-white/10 hover:bg-white/20 text-sand-100 transition-all" data-category="prose">خواطر وأدب</button>
+                        <button onclick="filterPosts('photo')" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-white/10 hover:bg-white/20 text-sand-100 transition-all" data-category="photo">عدسة وحدث</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feed Layout: Posts Grid + Sidebar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Posts Stream -->
+                <div class="lg:col-span-2 space-y-6" id="postsContainer">
+                    <!-- Posts dynamically inserted here -->
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- User Mini Profile Widget -->
+                    <div class="bg-white dark:bg-sand-800 rounded-2xl p-5 border border-amber-500/15 shadow-sm">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img id="sideAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="صورة المستخدم" class="w-14 h-14 rounded-full object-cover ring-2 ring-amber-500/40">
+                            <div>
+                                <h3 id="sideName" class="font-bold text-slate-800 dark:text-sand-100 font-tajawal">سارة العتيبي</h3>
+                                <p id="sideHandle" class="text-xs text-slate-400 dark:text-sand-100/50">@sara_poet</p>
+                                <span class="inline-block px-2 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] rounded mt-1 font-calligraphy">شاعرة وكاتبة</span>
+                            </div>
+                        </div>
+                        <p id="sideBio" class="text-xs text-slate-600 dark:text-sand-100/70 mb-4 line-clamp-2">أكتبُ الحرف حين يُثقلني الصمت، وألتقط الصور حين تعجز الكلمات.</p>
+                        <div class="flex justify-between border-t border-amber-500/10 pt-3 text-center text-xs">
+                            <div>
+                                <span id="sidePoemCount" class="block font-bold text-amber-600 dark:text-amber-400 text-sm">12</span>
+                                <span class="text-slate-400 dark:text-sand-100/50">مشاركة</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-amber-600 dark:text-amber-400 text-sm">1.4k</span>
+                                <span class="text-slate-400 dark:text-sand-100/50">متابع</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-amber-600 dark:text-amber-400 text-sm">382</span>
+                                <span class="text-slate-400 dark:text-sand-100/50">يتابع</span>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('profile')" class="w-full mt-4 py-2 bg-sand-100 dark:bg-sand-900/60 hover:bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-xl text-xs font-medium transition-all border border-amber-500/20">
+                            عرض الملف الشخصي الكامل
+                        </button>
+                    </div>
+
+                    <!-- Trending Topics / Tags -->
+                    <div class="bg-white dark:bg-sand-800 rounded-2xl p-5 border border-amber-500/15 shadow-sm">
+                        <h4 class="font-bold text-sm text-slate-800 dark:text-sand-100 mb-3 flex items-center gap-2 font-calligraphy">
+                            <i class="fa-solid fa-hashtag text-amber-500"></i>
+                            وسوم رائجة
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span onclick="filterByTag('غزل')" class="cursor-pointer text-xs px-2.5 py-1 bg-sand-100 dark:bg-sand-900 text-slate-600 dark:text-sand-100/80 rounded-lg hover:border-amber-500 border border-transparent transition-all">#غزل</span>
+                            <span onclick="filterByTag('فصحى')" class="cursor-pointer text-xs px-2.5 py-1 bg-sand-100 dark:bg-sand-900 text-slate-600 dark:text-sand-100/80 rounded-lg hover:border-amber-500 border border-transparent transition-all">#شعر_فصحى</span>
+                            <span onclick="filterByTag('نبطي')" class="cursor-pointer text-xs px-2.5 py-1 bg-sand-100 dark:bg-sand-900 text-slate-600 dark:text-sand-100/80 rounded-lg hover:border-amber-500 border border-transparent transition-all">#نبطيات</span>
+                            <span onclick="filterByTag('تصوير')" class="cursor-pointer text-xs px-2.5 py-1 bg-sand-100 dark:bg-sand-900 text-slate-600 dark:text-sand-100/80 rounded-lg hover:border-amber-500 border border-transparent transition-all">#عدسة_المساء</span>
+                            <span onclick="filterByTag('قهوة')" class="cursor-pointer text-xs px-2.5 py-1 bg-sand-100 dark:bg-sand-900 text-slate-600 dark:text-sand-100/80 rounded-lg hover:border-amber-500 border border-transparent transition-all">#خواطر_قهوة</span>
+                        </div>
+                    </div>
+
+                    <!-- Poetry Quote of the Day -->
+                    <div class="rounded-2xl p-5 bg-gradient-to-br from-amber-500/10 to-emerald-500/5 border border-amber-500/20 text-center">
+                        <i class="fa-solid fa-quote-right text-2xl text-amber-500/40 mb-2"></i>
+                        <p class="font-poem text-lg text-slate-800 dark:text-amber-100 mb-2 leading-relaxed">"سَألتُ العُمُرَ كَيفَ تَمُرُّ دُونَ لِقَاء؟<br>فَقَالَ: الشَّوقُ حَيٌّ كَيْفَ يَفْنَى؟"</p>
+                        <span class="text-xs text-amber-600 dark:text-amber-400 font-calligraphy">— بيت اليوم</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: Profile View -->
+        <div id="profileSection" class="hidden space-y-6">
+            <!-- Profile Header Card -->
+            <div class="bg-white dark:bg-sand-800 rounded-2xl overflow-hidden border border-amber-500/20 shadow-md">
+                <!-- Cover Image -->
+                <div class="h-36 sm:h-48 bg-gradient-to-r from-amber-800 via-amber-700 to-emerald-900 relative">
+                    <img id="profileCoverImg" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&auto=format&fit=crop&q=80" alt="غلاف الملف" class="w-full h-full object-cover opacity-40">
+                    <button onclick="editProfileCover()" class="absolute top-3 left-3 px-3 py-1 bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm rounded-lg text-xs flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>تغيير الغلاف</span>
+                    </button>
+                </div>
+
+                <!-- Profile Info Bar -->
+                <div class="px-6 pb-6 relative">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-end justify-between -mt-16 sm:-mt-20 gap-4 mb-4">
+                        <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 text-center sm:text-right">
+                            <div class="relative">
+                                <img id="profAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="صورة الملف" class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-white dark:ring-sand-800 shadow-lg">
+                                <button onclick="triggerAvatarUpload()" class="absolute bottom-1 right-1 w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs shadow-md hover:bg-amber-700 transition-all">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2 sm:mt-0">
+                                <h2 id="profName" class="text-2xl font-bold font-tajawal text-slate-800 dark:text-sand-100">سارة العتيبي</h2>
+                                <p id="profHandle" class="text-sm text-slate-400 dark:text-sand-100/50">@sara_poet</p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-2">
+                            <button onclick="openEditProfileModal()" class="px-4 py-2 bg-sand-100 dark:bg-sand-900 hover:bg-amber-500/10 text-slate-700 dark:text-sand-100 border border-amber-500/20 rounded-xl text-xs font-medium transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-user-gear"></i>
+                                <span>تعديل الملف</span>
+                            </button>
+                            <button onclick="openPostModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-medium shadow-md shadow-amber-500/20 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>مشاركة جديدة</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bio and Status -->
+                    <div class="max-w-2xl space-y-2">
+                        <p id="profBio" class="text-sm text-slate-600 dark:text-sand-100/80 leading-relaxed font-tajawal">
+                            أكتبُ الحرف حين يُثقلني الصمت، وألتقط الصور حين تعجز الكلمات. مهتمة بالنصوص النبطية والفصحى والتصوير الفوتوغرافي الطبيعي.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400 dark:text-sand-100/50 pt-2">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-amber-500"></i> الرياض، المملكة العربية السعودية</span>
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-amber-500"></i> انضم أغسطس 2024</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="flex justify-around sm:justify-start gap-8 border-t border-amber-500/10 mt-6 pt-4 text-center sm:text-right">
+                        <div>
+                            <span id="profPostCount" class="block font-bold text-lg text-amber-600 dark:text-amber-400">12</span>
+                            <span class="text-xs text-slate-400 dark:text-sand-100/50">قصيدة ومشاركة</span>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-lg text-amber-600 dark:text-amber-400">1,420</span>
+                            <span class="text-xs text-slate-400 dark:text-sand-100/50">متابع</span>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-lg text-amber-600 dark:text-amber-400">382</span>
+                            <span class="text-xs text-slate-400 dark:text-sand-100/50">يتابعهم</span>
+                        </div>
+                        <div>
+                            <span id="profLikesReceived" class="block font-bold text-lg text-amber-600 dark:text-amber-400">3.8k</span>
+                            <span class="text-xs text-slate-400 dark:text-sand-100/50">إعجاب</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content Tabs -->
+            <div class="flex border-b border-amber-500/20 text-sm font-medium">
+                <button onclick="switchProfileSubTab('myPosts')" id="tab-myPosts" class="py-3 px-6 border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-feather"></i>
+                    <span>مشاركاتي</span>
+                </button>
+                <button onclick="switchProfileSubTab('bookmarks')" id="tab-bookmarks" class="py-3 px-6 border-b-2 border-transparent text-slate-500 hover:text-amber-600 dark:text-sand-100/60 dark:hover:text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <span>المحفوظات</span>
+                </button>
+            </div>
+
+            <!-- User Posts Container -->
+            <div id="userPostsContainer" class="space-y-6">
+                <!-- Dynamically filled with user posts -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: Create New Post -->
+    <div id="postModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-sand-800 rounded-2xl max-w-xl w-full border border-amber-500/20 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="postModalCard">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-amber-500/15 flex items-center justify-between bg-sand-50/50 dark:bg-sand-900/50">
+                <h3 class="font-bold font-calligraphy text-lg text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                    <span>تسطير مشاركة جديدة</span>
+                </h3>
+                <button onclick="closePostModal()" class="w-8 h-8 rounded-full hover:bg-slate-200 dark:hover:bg-sand-700 flex items-center justify-center text-slate-500 dark:text-sand-100 transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form -->
+            <form id="createPostForm" onsubmit="handleCreatePost(event)" class="p-5 space-y-4">
+                <!-- Post Type Selector -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1.5">نوع المشاركة</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="postCategory" value="poem" class="peer hidden" checked onchange="togglePoemVerseInput()">
+                            <div class="p-2.5 rounded-xl border border-amber-500/20 text-center peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 text-xs font-medium text-slate-700 dark:text-sand-100 transition-all">
+                                <i class="fa-solid fa-scroll block text-base mb-1"></i>
+                                أبيات شعرية
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="postCategory" value="prose" class="peer hidden" onchange="togglePoemVerseInput()">
+                            <div class="p-2.5 rounded-xl border border-amber-500/20 text-center peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 text-xs font-medium text-slate-700 dark:text-sand-100 transition-all">
+                                <i class="fa-solid fa-quote-left block text-base mb-1"></i>
+                                خاطرة / أدب
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="postCategory" value="photo" class="peer hidden" onchange="togglePoemVerseInput()">
+                            <div class="p-2.5 rounded-xl border border-amber-500/20 text-center peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 text-xs font-medium text-slate-700 dark:text-sand-100 transition-all">
+                                <i class="fa-solid fa-image block text-base mb-1"></i>
+                                صورة وحكاية
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Title (Optional) -->
+                <div>
+                    <input type="text" id="postTitle" placeholder="عنوان النص / القصيدة (اختياري)" class="w-full px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm focus:outline-none focus:border-amber-500 dark:text-sand-100">
+                </div>
+
+                <!-- Verse Helpers info for Poetry -->
+                <div id="poemVerseHint" class="text-[11px] text-amber-600 dark:text-amber-400 bg-amber-500/10 p-2 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>نصيحة: للفصل بين شطري البيت الشعري، استخدم علامة النجمة (*) أو الشرطة العمودية (|). مثال: الصدر هنا * العجز هنا</span>
+                </div>
+
+                <!-- Content Area -->
+                <div>
+                    <textarea id="postContent" rows="5" required placeholder="اكتب نصك الأدبي أو أبيات قصيدتك هنا..." class="w-full p-3 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm focus:outline-none focus:border-amber-500 dark:text-sand-100 font-poem text-base leading-relaxed resize-none"></textarea>
+                </div>
+
+                <!-- Image URL Input or Preset Selection -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1">صورة مرفقة (رابط أو اختر صورة تجريبية)</label>
+                    <div class="flex gap-2">
+                        <input type="url" id="postImageUrl" placeholder="https://example.com/image.jpg" class="flex-1 px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-xs focus:outline-none focus:border-amber-500 dark:text-sand-100">
+                        <button type="button" onclick="useRandomPresetImage()" class="px-3 py-2 bg-sand-100 dark:bg-sand-700 text-xs rounded-xl hover:bg-amber-500/20 transition-all">صورة عشوائية</button>
+                    </div>
+                </div>
+
+                <!-- Tags Input -->
+                <div>
+                    <input type="text" id="postTags" placeholder="الوسوم (مثال: غزل، شعر_فصحى، الرياض)" class="w-full px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-xs focus:outline-none focus:border-amber-500 dark:text-sand-100">
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="flex justify-end gap-2 pt-3 border-t border-amber-500/15">
+                    <button type="button" onclick="closePostModal()" class="px-4 py-2 text-xs font-medium text-slate-600 dark:text-sand-100/70 hover:bg-slate-100 dark:hover:bg-sand-700 rounded-xl transition-all">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-medium bg-amber-600 hover:bg-amber-700 text-white rounded-xl shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>نشر المشاركة</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Profile -->
+    <div id="editProfileModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-sand-800 rounded-2xl max-w-md w-full border border-amber-500/20 shadow-2xl overflow-hidden p-6 space-y-4">
+            <h3 class="font-bold text-lg text-slate-800 dark:text-sand-100 font-calligraphy border-b border-amber-500/20 pb-3">تعديل البيانات الشخصية</h3>
+            
+            <form id="editProfileForm" onsubmit="handleSaveProfile(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1">الاسم الكامل</label>
+                    <input type="text" id="editName" required class="w-full px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm dark:text-sand-100">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1">المعرف (@username)</label>
+                    <input type="text" id="editHandle" required class="w-full px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm dark:text-sand-100">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1">رابط الصورة الشخصية</label>
+                    <input type="url" id="editAvatarUrl" required class="w-full px-3 py-2 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm dark:text-sand-100">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-sand-100/70 mb-1">النبذة التعريفية (Bio)</label>
+                    <textarea id="editBio" rows="3" class="w-full p-3 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-sm dark:text-sand-100 resize-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditProfileModal()" class="px-4 py-2 text-xs font-medium text-slate-600 dark:text-sand-100/70 rounded-xl">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-medium bg-amber-600 text-white rounded-xl shadow-md">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Avatar File Picker -->
+    <input type="file" id="avatarFileInput" class="hidden" accept="image/*" onchange="handleAvatarFileSelect(event)">
+
+    <!-- Footer -->
+    <footer class="mt-12 border-t border-amber-500/15 py-6 bg-sand-100/50 dark:bg-sand-900/50">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-sand-100/40 space-y-2">
+            <p class="font-calligraphy text-base text-amber-700 dark:text-amber-400">ملاذ — حيث تعانق الحروف أرواح المبدعين</p>
+            <p>© 2026 جميع الحقوق محفوظة لشبكة التدوين والشعر العربي</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic & Local Persistence -->
+    <script>
+        // Sample Initial Posts
+        const INITIAL_POSTS = [
+            {
+                id: 'post-1',
+                author: {
+                    name: 'عبدالله السبيعي',
+                    handle: '@abdullah_subaie',
+                    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+                    role: 'شاعر نبطي'
+                },
+                category: 'poem',
+                title: 'شاطئ الذكريات',
+                content: `يا منازل الأحباب وين التباشير * جيتك وشوق الأمس بالقلب وقاد\nمرت سنين العُمُر بين المقادير * ولا زال طيفك داخل العين ما باد\nنسيمك العذب يبري الهمّ وتصير * أيامنا للقلب أعياد وأعياد`,
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+                tags: ['نبطي', 'شعر', 'حنين'],
+                likes: 42,
+                liked: false,
+                bookmarked: false,
+                comments: [
+                    { name: 'سارة العتيبي', text: 'صح لسانك وسلمت أناملك الشاعرة!' },
+                    { name: 'فهد التميمي', text: 'أبيات جزلة وكلمات تمس الوجدان.' }
+                ],
+                timestamp: 'منذ ساعتين'
+            },
+            {
+                id: 'post-2',
+                author: {
+                    name: 'سارة العتيبي',
+                    handle: '@sara_poet',
+                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+                    role: 'شاعرة وكاتبة'
+                },
+                category: 'prose',
+                title: 'هدوء المساء وشغف الفن',
+                content: 'في بعض الليالي، لا تحتاج لأكثر من فنجان قهوة دافئ، وصوت المطر وهو يقرع النافذة بهدوء. هناك أفكار لا تُكتب إلا حين ينام العالم كلياً، وتستيقظ الأرواح الحالمة لتغازل النجوم والورق.',
+                image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80',
+                tags: ['خواطر', 'قهوة', 'مسائيات'],
+                likes: 89,
+                liked: true,
+                bookmarked: true,
+                comments: [
+                    { name: 'منى الماجد', text: 'وصف في غاية الرقة والجمال ✨' }
+                ],
+                timestamp: 'منذ 5 ساعات'
+            },
+            {
+                id: 'post-3',
+                author: {
+                    name: 'خالد النجدي',
+                    handle: '@khaled_najd',
+                    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+                    role: 'مصور وفنان'
+                },
+                category: 'photo',
+                title: 'غروب الصحراء المذهل',
+                content: 'التقطت هذه الصورة في صحراء الدهناء، حيث تتحول الرمال إلى ذهب مصفى مع لمسات الشفق الأحمر. الصحراء ليست مجرد رمال، بل هي قصة صمود وجرأة وجمال هادئ.',
+                image: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=800&auto=format&fit=crop&q=80',
+                tags: ['تصوير', 'الصحراء', 'طبيعة'],
+                likes: 128,
+                liked: false,
+                bookmarked: false,
+                comments: [],
+                timestamp: 'أمس'
+            }
+        ];
+
+        // Default Current User Profile State
+        let currentUser = {
+            name: 'سارة العتيبي',
+            handle: '@sara_poet',
+            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+            cover: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&auto=format&fit=crop&q=80',
+            bio: 'أكتبُ الحرف حين يُثقلني الصمت، وألتقط الصور حين تعجز الكلمات. مهتمة بالنصوص النبطية والفصحى والتصوير الفوتوغرافي الطبيعي.'
+        };
+
+        // State variables
+        let posts = [];
+        let currentFilter = 'all';
+        let currentTagFilter = null;
+        let activeTab = 'feed';
+        let activeProfileSubTab = 'myPosts';
+
+        // Initialize App
+        window.onload = function() {
+            loadFromLocalStorage();
+            renderPosts();
+            updateProfileUI();
+        };
+
+        // Storage Handlers
+        function loadFromLocalStorage() {
+            const savedPosts = localStorage.getItem('maladh_posts');
+            if (savedPosts) {
+                posts = JSON.parse(savedPosts);
+            } else {
+                posts = INITIAL_POSTS;
+                savePostsToStorage();
+            }
+
+            const savedUser = localStorage.getItem('maladh_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+        }
+
+        function savePostsToStorage() {
+            localStorage.setItem('maladh_posts', JSON.stringify(posts));
+        }
+
+        function saveUserToStorage() {
+            localStorage.setItem('maladh_user', JSON.stringify(currentUser));
+        }
+
+        // Navigation Tabs
+        function switchTab(tab) {
+            activeTab = tab;
+            const feedSec = document.getElementById('feedSection');
+            const profSec = document.getElementById('profileSection');
+            const navFeed = document.getElementById('nav-feed');
+            const navProf = document.getElementById('nav-profile');
+
+            if (tab === 'feed') {
+                feedSec.classList.remove('hidden');
+                profSec.classList.add('hidden');
+                navFeed.classList.add('text-amber-700', 'bg-amber-500/10', 'dark:text-amber-400');
+                navProf.classList.remove('text-amber-700', 'bg-amber-500/10', 'dark:text-amber-400');
+                renderPosts();
+            } else {
+                feedSec.classList.add('hidden');
+                profSec.classList.remove('hidden');
+                navProf.classList.add('text-amber-700', 'bg-amber-500/10', 'dark:text-amber-400');
+                navFeed.classList.remove('text-amber-700', 'bg-amber-500/10', 'dark:text-amber-400');
+                renderUserPosts();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchProfileSubTab(subTab) {
+            activeProfileSubTab = subTab;
+            const btnMy = document.getElementById('tab-myPosts');
+            const btnBook = document.getElementById('tab-bookmarks');
+
+            if (subTab === 'myPosts') {
+                btnMy.className = "py-3 px-6 border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 flex items-center gap-2 font-bold";
+                btnBook.className = "py-3 px-6 border-b-2 border-transparent text-slate-500 hover:text-amber-600 dark:text-sand-100/60 dark:hover:text-amber-400 flex items-center gap-2";
+            } else {
+                btnBook.className = "py-3 px-6 border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 flex items-center gap-2 font-bold";
+                btnMy.className = "py-3 px-6 border-b-2 border-transparent text-slate-500 hover:text-amber-600 dark:text-sand-100/60 dark:hover:text-amber-400 flex items-center gap-2";
+            }
+            renderUserPosts();
+        }
+
+        // Render Posts
+        function renderPosts(filteredList = null) {
+            const container = document.getElementById('postsContainer');
+            let list = filteredList || posts;
+
+            // Apply category filter if active
+            if (!filteredList && currentFilter !== 'all') {
+                list = list.filter(p => p.category === currentFilter);
+            }
+
+            // Apply Tag filter if active
+            if (!filteredList && currentTagFilter) {
+                list = list.filter(p => p.tags && p.tags.includes(currentTagFilter));
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-sand-800 rounded-2xl p-12 text-center border border-amber-500/15">
+                        <i class="fa-solid fa-pen-fountain text-4xl text-amber-500/30 mb-3"></i>
+                        <h3 class="font-bold text-lg text-slate-700 dark:text-sand-100 font-calligraphy mb-1">لا توجد مشاركات هنا بعد</h3>
+                        <p class="text-xs text-slate-400 dark:text-sand-100/50 mb-4">كن أول من ينشر خاطرة أو قصيدة في هذا القسم!</p>
+                        <button onclick="openPostModal()" class="px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-medium shadow-md">أنشئ منشوراً جديداً</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(post => createPostHTML(post)).join('');
+        }
+
+        function renderUserPosts() {
+            const container = document.getElementById('userPostsContainer');
+            let list = [];
+
+            if (activeProfileSubTab === 'myPosts') {
+                list = posts.filter(p => p.author.handle === currentUser.handle);
+            } else { // bookmarks
+                list = posts.filter(p => p.bookmarked);
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-sand-800 rounded-2xl p-10 text-center border border-amber-500/15">
+                        <i class="fa-solid fa-scroll text-3xl text-amber-500/30 mb-2"></i>
+                        <p class="text-xs text-slate-500 dark:text-sand-100/60 font-tajawal">لا يوجد محتوى في هذا القسم حتى الآن.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(post => createPostHTML(post)).join('');
+        }
+
+        // HTML Generator for Post Card
+        function createPostHTML(post) {
+            // Category badge name
+            const categoryNames = {
+                poem: { label: 'قصيدة / شعر', icon: 'fa-scroll', bg: 'bg-amber-500/10 text-amber-700 dark:text-amber-400' },
+                prose: { label: 'خاطرة أدبية', icon: 'fa-quote-left', bg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' },
+                photo: { label: 'عدسة وحدث', icon: 'fa-camera', bg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400' }
+            };
+            const cat = categoryNames[post.category] || categoryNames.prose;
+
+            // Formatted Poem verses if poetry category
+            let formattedContent = '';
+            if (post.category === 'poem') {
+                const lines = post.content.split('\n');
+                const versesHtml = lines.map(line => {
+                    if (line.includes('*')) {
+                        const [sadr, ajaz] = line.split('*');
+                        return `<div class="poem-verse font-poem text-base sm:text-lg text-slate-800 dark:text-amber-100">
+                                    <span class="flex-1">${sadr.trim()}</span>
+                                    <span class="text-amber-500/40 text-xs hidden sm:inline">✤</span>
+                                    <span class="flex-1">${ajaz ? ajaz.trim() : ''}</span>
+                                </div>`;
+                    } else if (line.includes('|')) {
+                        const [sadr, ajaz] = line.split('|');
+                        return `<div class="poem-verse font-poem text-base sm:text-lg text-slate-800 dark:text-amber-100">
+                                    <span class="flex-1">${sadr.trim()}</span>
+                                    <span class="text-amber-500/40 text-xs hidden sm:inline">✤</span>
+                                    <span class="flex-1">${ajaz ? ajaz.trim() : ''}</span>
+                                </div>`;
+                    } else {
+                        return `<p class="font-poem text-base sm:text-lg text-center my-1 text-slate-800 dark:text-amber-100">${line}</p>`;
+                    }
+                }).join('');
+                formattedContent = `<div class="bg-amber-500/5 dark:bg-sand-900/40 p-4 sm:p-6 rounded-xl border border-amber-500/10 space-y-1 my-3">${versesHtml}</div>`;
+            } else {
+                formattedContent = `<p class="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-sand-100/90 font-tajawal my-3">${escapeHTML(post.content).replace(/\n/g, '<br>')}</p>`;
+            }
+
+            // Tags HTML
+            const tagsHtml = post.tags && post.tags.length > 0 ? `
+                <div class="flex flex-wrap gap-1.5 my-3">
+                    ${post.tags.map(t => `<span onclick="filterByTag('${t}')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded-md bg-sand-100 dark:bg-sand-900 text-amber-700 dark:text-amber-400 hover:underline">#${t}</span>`).join('')}
+                </div>
+            ` : '';
+
+            // Comments List HTML
+            const commentsHtml = post.comments && post.comments.length > 0 ? `
+                <div class="mt-4 pt-3 border-t border-amber-500/10 space-y-2">
+                    ${post.comments.map(c => `
+                        <div class="text-xs bg-sand-50 dark:bg-sand-900/60 p-2.5 rounded-xl flex items-start justify-between">
+                            <div>
+                                <span class="font-bold text-slate-800 dark:text-sand-100 ml-1.5">${escapeHTML(c.name)}:</span>
+                                <span class="text-slate-600 dark:text-sand-100/80">${escapeHTML(c.text)}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : '';
+
+            return `
+                <article class="bg-white dark:bg-sand-800 rounded-2xl p-5 sm:p-6 border border-amber-500/15 shadow-sm hover:shadow-md transition-shadow">
+                    <!-- Post Header -->
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <img src="${post.author.avatar}" alt="${post.author.name}" class="w-11 h-11 rounded-full object-cover ring-2 ring-amber-500/30">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-sm text-slate-800 dark:text-sand-100">${escapeHTML(post.author.name)}</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full ${cat.bg} font-medium flex items-center gap-1">
+                                        <i class="fa-solid ${cat.icon} text-[9px]"></i>
+                                        ${cat.label}
+                                    </span>
+                                </div>
+                                <span class="text-xs text-slate-400 dark:text-sand-100/50">${post.author.handle} • ${post.timestamp}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bookmark Option -->
+                        <button onclick="toggleBookmark('${post.id}')" class="text-slate-400 hover:text-amber-500 transition-colors p-1" title="حفظ المشاركة">
+                            <i class="${post.bookmarked ? 'fa-solid text-amber-500' : 'fa-regular'} fa-bookmark text-base"></i>
+                        </button>
+                    </div>
+
+                    <!-- Optional Title -->
+                    ${post.title ? `<h3 class="font-bold font-calligraphy text-lg sm:text-xl text-amber-800 dark:text-amber-300 mt-2">${escapeHTML(post.title)}</h3>` : ''}
+
+                    <!-- Post Body -->
+                    ${formattedContent}
+
+                    <!-- Post Attached Image -->
+                    ${post.image ? `
+                        <div class="my-3 rounded-xl overflow-hidden max-h-96 border border-amber-500/10">
+                            <img src="${post.image}" alt="مرفق" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    ` : ''}
+
+                    <!-- Tags -->
+                    ${tagsHtml}
+
+                    <!-- Interactive Bar (Likes, Comments, Share) -->
+                    <div class="flex items-center justify-between pt-3 mt-2 border-t border-amber-500/10 text-xs text-slate-500 dark:text-sand-100/60">
+                        <div class="flex items-center gap-4">
+                            <button onclick="toggleLike('${post.id}')" class="flex items-center gap-1.5 hover:text-red-500 transition-colors ${post.liked ? 'text-red-500 font-bold' : ''}">
+                                <i class="${post.liked ? 'fa-solid' : 'fa-regular'} fa-heart text-sm"></i>
+                                <span>${post.likes}</span>
+                            </button>
+                            
+                            <button onclick="toggleCommentBox('${post.id}')" class="flex items-center gap-1.5 hover:text-amber-600 transition-colors">
+                                <i class="fa-regular fa-comment text-sm"></i>
+                                <span>${post.comments ? post.comments.length : 0} تعليق</span>
+                            </button>
+                        </div>
+
+                        <button onclick="sharePost('${post.id}')" class="hover:text-amber-600 transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <span class="hidden sm:inline">مشاركة</span>
+                        </button>
+                    </div>
+
+                    <!-- Hidden Comment Input Form -->
+                    <div id="commentBox-${post.id}" class="hidden mt-3 pt-3 border-t border-amber-500/10">
+                        <div class="flex gap-2">
+                            <input type="text" id="commentInput-${post.id}" placeholder="اكتب تعليقاً لطيفاً..." class="flex-1 px-3 py-1.5 bg-sand-50 dark:bg-sand-900 border border-amber-500/20 rounded-xl text-xs focus:outline-none focus:border-amber-500 dark:text-sand-100">
+                            <button onclick="addComment('${post.id}')" class="px-3 py-1.5 bg-amber-600 text-white rounded-xl text-xs hover:bg-amber-700 transition-all">إرسال</button>
+                        </div>
+                        ${commentsHtml}
+                    </div>
+                </article>
+            `;
+        }
+
+        // Post Interactivity Functions
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                savePostsToStorage();
+                if (activeTab === 'feed') renderPosts(); else renderUserPosts();
+            }
+        }
+
+        function toggleBookmark(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.bookmarked = !post.bookmarked;
+                savePostsToStorage();
+                if (activeTab === 'feed') renderPosts(); else renderUserPosts();
+            }
+        }
+
+        function toggleCommentBox(postId) {
+            const box = document.getElementById(`commentBox-${postId}`);
+            if (box) {
+                box.classList.toggle('hidden');
+            }
+        }
+
+        function addComment(postId) {
+            const input = document.getElementById(`commentInput-${postId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                if (!post.comments) post.comments = [];
+                post.comments.push({
+                    name: currentUser.name,
+                    text: text
+                });
+                input.value = '';
+                savePostsToStorage();
+                if (activeTab === 'feed') renderPosts(); else renderUserPosts();
+            }
+        }
+
+        function sharePost(postId) {
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            showNotification('تم نسخ رابط المشاركة للحافظة بنجاح!');
+        }
+
+        // Create Post Logic
+        function openPostModal() {
+            const modal = document.getElementById('postModal');
+            const card = document.getElementById('postModalCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closePostModal() {
+            const modal = document.getElementById('postModal');
+            const card = document.getElementById('postModalCard');
+            modal.classList.add('opacity-0');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function togglePoemVerseInput() {
+            const category = document.querySelector('input[name="postCategory"]:checked').value;
+            const hint = document.getElementById('poemVerseHint');
+            if (category === 'poem') {
+                hint.classList.remove('hidden');
+            } else {
+                hint.classList.add('hidden');
+            }
+        }
+
+        function useRandomPresetImage() {
+            const sampleImages = [
+                'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80',
+                'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&auto=format&fit=crop&q=80',
+                'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&auto=format&fit=crop&q=80',
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80'
+            ];
+            const randomImg = sampleImages[Math.floor(Math.random() * sampleImages.length)];
+            document.getElementById('postImageUrl').value = randomImg;
+        }
+
+        function handleCreatePost(e) {
+            e.preventDefault();
+            const category = document.querySelector('input[name="postCategory"]:checked').value;
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const imageUrl = document.getElementById('postImageUrl').value.trim();
+            const tagsInput = document.getElementById('postTags').value.trim();
+
+            if (!content) return;
+
+            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim().replace('#', '')) : [];
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                author: {
+                    name: currentUser.name,
+                    handle: currentUser.handle,
+                    avatar: currentUser.avatar,
+                    role: 'كاتب ومبدع'
+                },
+                category: category,
+                title: title,
+                content: content,
+                image: imageUrl || null,
+                tags: tags,
+                likes: 0,
+                liked: false,
+                bookmarked: false,
+                comments: [],
+                timestamp: 'الآن'
+            };
+
+            posts.unshift(newPost);
+            savePostsToStorage();
+
+            // Reset form
+            document.getElementById('createPostForm').reset();
+            closePostModal();
+
+            // Refresh view
+            if (activeTab === 'feed') {
+                renderPosts();
+            } else {
+                renderUserPosts();
+            }
+
+            showNotification('تم نشر مشاركتك بنجاح على المنصة!');
+        }
+
+        // Profile Management
+        function updateProfileUI() {
+            document.getElementById('sideName').textContent = currentUser.name;
+            document.getElementById('sideHandle').textContent = currentUser.handle;
+            document.getElementById('sideBio').textContent = currentUser.bio;
+            document.getElementById('sideAvatar').src = currentUser.avatar;
+
+            document.getElementById('profName').textContent = currentUser.name;
+            document.getElementById('profHandle').textContent = currentUser.handle;
+            document.getElementById('profBio').textContent = currentUser.bio;
+            document.getElementById('profAvatar').src = currentUser.avatar;
+            document.getElementById('profileCoverImg').src = currentUser.cover;
+
+            const myCount = posts.filter(p => p.author.handle === currentUser.handle).length;
+            document.getElementById('profPostCount').textContent = myCount;
+            document.getElementById('sidePoemCount').textContent = myCount;
+        }
+
+        function openEditProfileModal() {
+            document.getElementById('editName').value = currentUser.name;
+            document.getElementById('editHandle').value = currentUser.handle;
+            document.getElementById('editAvatarUrl').value = currentUser.avatar;
+            document.getElementById('editBio').value = currentUser.bio;
+
+            const modal = document.getElementById('editProfileModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function handleSaveProfile(e) {
+            e.preventDefault();
+            currentUser.name = document.getElementById('editName').value.trim();
+            currentUser.handle = document.getElementById('editHandle').value.trim();
+            currentUser.avatar = document.getElementById('editAvatarUrl').value.trim();
+            currentUser.bio = document.getElementById('editBio').value.trim();
+
+            saveUserToStorage();
+            updateProfileUI();
+            closeEditProfileModal();
+            showNotification('تم تحديث بياناتك الشخصية بنجاح!');
+        }
+
+        function triggerAvatarUpload() {
+            document.getElementById('avatarFileInput').click();
+        }
+
+        function handleAvatarFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    currentUser.avatar = event.target.result;
+                    saveUserToStorage();
+                    updateProfileUI();
+                    showNotification('تم تحديث الصورة الشخصية!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function editProfileCover() {
+            const newUrl = prompt('أدخل رابط الصورة للغلاف الجديد:', currentUser.cover);
+            if (newUrl) {
+                currentUser.cover = newUrl;
+                saveUserToStorage();
+                updateProfileUI();
+            }
+        }
+
+        // Search & Filtering
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            filterByQuery(query);
+        }
+
+        function handleSearchMobile() {
+            const query = document.getElementById('searchInputMobile').value.trim().toLowerCase();
+            filterByQuery(query);
+        }
+
+        function filterByQuery(query) {
+            if (!query) {
+                renderPosts();
+                return;
+            }
+            const filtered = posts.filter(p => 
+                (p.title && p.title.toLowerCase().includes(query)) ||
+                p.content.toLowerCase().includes(query) ||
+                p.author.name.toLowerCase().includes(query) ||
+                (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
+            );
+            renderPosts(filtered);
+        }
+
+        function filterPosts(cat) {
+            currentFilter = cat;
+            currentTagFilter = null;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-category') === cat) {
+                    btn.classList.add('bg-amber-500', 'text-white');
+                    btn.classList.remove('bg-white/10', 'text-sand-100');
+                } else {
+                    btn.classList.remove('bg-amber-500', 'text-white');
+                    btn.classList.add('bg-white/10', 'text-sand-100');
+                }
+            });
+            renderPosts();
+        }
+
+        function filterByTag(tag) {
+            currentTagFilter = tag;
+            if (activeTab !== 'feed') switchTab('feed');
+            renderPosts();
+            showNotification(`تم تصفية المنشورات حسب الوسم: #${tag}`);
+        }
+
+        // Theme Toggle Function
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Utility: Escape HTML
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Toast Notification System
+        function showNotification(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 left-5 bg-amber-700 text-white text-xs px-4 py-2.5 rounded-xl shadow-xl z-50 flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${msg}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
